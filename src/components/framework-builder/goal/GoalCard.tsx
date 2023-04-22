@@ -1,4 +1,4 @@
-import { Box, Button, Card, collapseClasses } from "@mui/material";
+import { Box } from "@mui/material";
 import { Goal } from "../../../results";
 import FrameworkLevelCard from "../../FrameworkLevelCard";
 import OutcomeCard from "../outcome/OutcomeCard";
@@ -6,9 +6,9 @@ import { generateId } from "../../../app/generateId";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { deepOrange } from "@mui/material/colors";
-import { removeGoal, upsertGoal } from "./goalSlice";
+import { removeGoal, updateGoal } from "./goalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllOutcomes, upsertOutcome } from "../outcome/outcomeSlice";
+import { insertOutcome, selectAllOutcomes } from "../outcome/outcomeSlice";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -24,18 +24,18 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
     () => allOutcomes.filter((o) => goal.childrenIds.includes(o.id)),
     [allOutcomes, goal.childrenIds]
   );
-  const handleSave = () => dispatch(upsertGoal({ ...goal, title: "Updated" }));
+  const handleSave = () => dispatch(updateGoal({ ...goal, title: "Updated" }));
   const handleDelete = () => dispatch(removeGoal(goal.id));
   const handleNewOutcome = () => {
     const outcomeId = generateId();
     dispatch(
-      upsertGoal({ ...goal, childrenIds: [...goal.childrenIds, outcomeId] })
+      updateGoal({ ...goal, childrenIds: [...goal.childrenIds, outcomeId] })
     );
     dispatch(
-      upsertOutcome({
+      insertOutcome({
         type: "outcome",
         id: outcomeId,
-        title: "New outcome",
+        title: t("frameworkBuilder.outcome.defaultName"),
         childrenIds: [],
         indicatorIds: [],
       })
@@ -43,20 +43,25 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
   };
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(
-      upsertGoal({ ...goal, indicatorIds: [...goal.indicatorIds, indicatorId] })
+      updateGoal({ ...goal, indicatorIds: [...goal.indicatorIds, indicatorId] })
     );
   };
   const handleIndicatorDelete = (indicatorId: string) => {
     dispatch(
-      upsertGoal({
+      updateGoal({
         ...goal,
         indicatorIds: goal.indicatorIds.filter((iId) => iId !== indicatorId),
       })
     );
   };
+  const handleTitleChange = (title: string) =>
+    dispatch(updateGoal({ ...goal, title }));
+  const handleDescriptionChange = (description: string) => {
+    dispatch(updateGoal({ ...goal, description }));
+  };
 
   return (
-    <>
+    <Box data-testid="GoalCard">
       <FrameworkLevelCard
         avatar={{ text: "G", color: deepOrange[500] }}
         item={goal}
@@ -66,17 +71,22 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
             text: t("frameworkBuilder.goal.add_outcome"),
             icon: <AddIcon />,
             onClick: handleNewOutcome,
+            testid: "add-outcome-button",
           },
           {
             text: t("app.delete"),
             icon: <RemoveIcon />,
             onClick: handleDelete,
+            testid: "delete-goal-button",
           },
         ]}
         onIndicatorCreate={handleIndicatorCreate}
         onIndicatorDelete={handleIndicatorDelete}
+        onTitleChange={handleTitleChange}
+        onDescriptionChange={handleDescriptionChange}
       />
       <Box ml={2}>
+        blah
         {outcomes.map((o) => (
           <OutcomeCard
             key={o.id}
@@ -85,7 +95,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
           />
         ))}
       </Box>
-    </>
+    </Box>
   );
 };
 

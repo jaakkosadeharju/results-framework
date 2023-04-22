@@ -7,8 +7,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { deepPurple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
-import { removeOutcome, upsertOutcome } from "./outcomeSlice";
-import { selectAllOutputs, upsertOutput } from "../output/outputSlice";
+import { removeOutcome, updateOutcome } from "./outcomeSlice";
+import { selectAllOutputs, insertOutput } from "../output/outputSlice";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -26,21 +26,21 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
     [allOutputs, outcome.childrenIds]
   );
   const handleSave = () =>
-    dispatch(upsertOutcome({ ...outcome, title: "Updated" }));
+    dispatch(updateOutcome({ ...outcome, title: "Updated" }));
   const handleDelete = () => dispatch(removeOutcome(outcome.id));
   const handleNewOutput = () => {
     const outputId = generateId();
     dispatch(
-      upsertOutcome({
+      updateOutcome({
         ...outcome,
         childrenIds: [...outcome.childrenIds, outputId],
       })
     );
     dispatch(
-      upsertOutput({
+      insertOutput({
         type: "output",
         id: outputId,
-        title: "New output",
+        title: t("frameworkBuilder.output.defaultName"),
         childrenIds: [],
         indicatorIds: [],
       })
@@ -49,7 +49,7 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
 
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(
-      upsertOutcome({
+      updateOutcome({
         ...outcome,
         indicatorIds: [...outcome.indicatorIds, indicatorId],
       })
@@ -57,15 +57,21 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
   };
   const handleIndicatorDelete = (indicatorId: string) => {
     dispatch(
-      upsertOutcome({
+      updateOutcome({
         ...outcome,
         indicatorIds: outcome.indicatorIds.filter((iId) => iId !== indicatorId),
       })
     );
   };
+  const handleTitleChange = (title: string) => {
+    dispatch(updateOutcome({ ...outcome, title }));
+  };
+  const handleDescriptionChange = (description: string) => {
+    dispatch(updateOutcome({ ...outcome, description }));
+  };
 
   return (
-    <>
+    <Box data-testid="OutcomeCard">
       <FrameworkLevelCard
         avatar={{ text: "OC", color: deepPurple[500] }}
         item={outcome}
@@ -84,13 +90,15 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
         ]}
         onIndicatorCreate={handleIndicatorCreate}
         onIndicatorDelete={handleIndicatorDelete}
+        onTitleChange={handleTitleChange}
+        onDescriptionChange={handleDescriptionChange}
       />
       <Box ml={2}>
         {outputs.map((o) => (
           <OutputCard key={o.id} output={o} />
         ))}
       </Box>
-    </>
+    </Box>
   );
 };
 

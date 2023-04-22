@@ -1,4 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  PreloadedState,
+  combineReducers,
+  configureStore,
+} from "@reduxjs/toolkit";
 import goalReducer from "../components/framework-builder/goal/goalSlice";
 import outcomeSlice from "../components/framework-builder/outcome/outcomeSlice";
 import outputSlice from "../components/framework-builder/output/outputSlice";
@@ -9,19 +13,27 @@ const persistedState: any = JSON.parse(
   localStorage.getItem("appState") ?? "{}"
 );
 
-const store = configureStore({
-  reducer: {
-    goals: goalReducer,
-    outcomes: outcomeSlice,
-    outputs: outputSlice,
-    activities: activitySlice,
-    indicators: indicatorSlice,
-  },
-  preloadedState: persistedState,
+const rootReducer = combineReducers({
+  goals: goalReducer,
+  outcomes: outcomeSlice,
+  outputs: outputSlice,
+  activities: activitySlice,
+  indicators: indicatorSlice,
 });
+
+const setupStore = (preloadedState?: any) =>
+  configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+
+const store = setupStore(persistedState);
 
 store.subscribe(() => {
   localStorage.setItem("appState", JSON.stringify(store.getState()));
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppStore = ReturnType<typeof setupStore>;
 
 export default store;

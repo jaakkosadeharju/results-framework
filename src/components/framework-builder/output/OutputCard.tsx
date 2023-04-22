@@ -6,11 +6,11 @@ import { generateId } from "../../../app/generateId";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { pink } from "@mui/material/colors";
-import { removeOutput, upsertOutput } from "./outputSlice";
+import { removeOutput, updateOutput } from "./outputSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAllActivities,
-  upsertActivity,
+  insertActivity,
 } from "../../activity/activitySlice";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,20 +29,20 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
   );
   const handleDelete = () => dispatch(removeOutput(output.id));
   const handleSave = () =>
-    dispatch(upsertOutput({ ...output, title: "Updated" }));
+    dispatch(updateOutput({ ...output, title: "Updated" }));
   const handleAddActivity = () => {
     const activityId = generateId();
     dispatch(
-      upsertOutput({
+      updateOutput({
         ...output,
         childrenIds: [...output.childrenIds, activityId],
       })
     );
     dispatch(
-      upsertActivity({
+      insertActivity({
         type: "activity",
         id: activityId,
-        title: "New activity",
+        title: t("frameworkBuilder.activity.defaultName"),
         childrenIds: [],
         indicatorIds: [],
       })
@@ -50,7 +50,7 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
   };
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(
-      upsertOutput({
+      updateOutput({
         ...output,
         indicatorIds: [...output.indicatorIds, indicatorId],
       })
@@ -58,11 +58,17 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
   };
   const handleIndicatorDelete = (indicatorId: string) => {
     dispatch(
-      upsertOutput({
+      updateOutput({
         ...output,
         indicatorIds: output.indicatorIds.filter((iId) => iId !== indicatorId),
       })
     );
+  };
+  const handleTitleChange = (title: string) => {
+    dispatch(updateOutput({ ...output, title }));
+  };
+  const handleDescriptionChange = (description: string) => {
+    dispatch(updateOutput({ ...output, description }));
   };
 
   return (
@@ -85,6 +91,8 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
         ]}
         onIndicatorCreate={handleIndicatorCreate}
         onIndicatorDelete={handleIndicatorDelete}
+        onTitleChange={handleTitleChange}
+        onDescriptionChange={handleDescriptionChange}
       />
       <Box ml={2}>
         {activities.map((a) => (

@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Indicator } from "../../../results";
-import store from "../../../app/store";
+import store, { RootState } from "../../../app/store";
 
 const indicatorsAdapter = createEntityAdapter<Indicator>({
   selectId: (indicator) => indicator.id,
@@ -11,14 +11,15 @@ export const indicatorslice = createSlice({
   name: "indicators",
   initialState: indicatorsAdapter.getInitialState(),
   reducers: {
-    upsertIndicator: indicatorsAdapter.upsertOne,
+    insertIndicator: indicatorsAdapter.addOne,
+    updateIndicator: indicatorsAdapter.upsertOne,
     removeIndicator: indicatorsAdapter.removeOne,
   },
 });
 
-export const { upsertIndicator, removeIndicator } = indicatorslice.actions;
+export const { insertIndicator, updateIndicator, removeIndicator } =
+  indicatorslice.actions;
 
-type RootState = ReturnType<typeof store.getState>;
 const indicatorselectors = indicatorsAdapter.getSelectors<RootState>(
   (state) => state.indicators
 );

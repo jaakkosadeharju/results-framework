@@ -2,7 +2,8 @@ import { Button, Grid } from "@mui/material";
 import { Indicator, ResultLevel } from "../../../results";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useDispatch } from "react-redux";
-import { removeIndicator } from "./indicatorSlice";
+import { removeIndicator, updateIndicator } from "./indicatorSlice";
+import InPlaceEditor from "../../InPlaceEditor";
 
 export interface IndicatorRowProps {
   parent: ResultLevel;
@@ -23,9 +24,18 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
     onIndicatorDelete(indicator?.id);
   };
 
+  const handleNameChange = (title: string) => {
+    dispatch(updateIndicator({ ...indicator, title }));
+  };
+
   return (
     <Grid container alignItems="center">
-      <Grid item>{indicator?.title ?? "Indicator"}</Grid>
+      <Grid item>
+        <InPlaceEditor
+          value={indicator?.title ?? "Indicator"}
+          onChange={handleNameChange}
+        />
+      </Grid>
       <Grid item>
         <Button size="small" color="error" onClick={handleDelete}>
           <DeleteForeverIcon />

@@ -3,8 +3,7 @@ import GoalCard from "./GoalCard";
 import AddIcon from "@mui/icons-material/Add";
 import { generateId } from "../../../app/generateId";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllGoals, upsertGoal } from "./goalSlice";
-import { Goal } from "../../../results";
+import { selectAllGoals, insertGoal } from "./goalSlice";
 import { useTranslation } from "react-i18next";
 
 export interface GoalListProps {}
@@ -15,10 +14,10 @@ const GoalList: React.FC<GoalListProps> = () => {
   const goals = useSelector(selectAllGoals);
   const handleNewGoal = () => {
     dispatch(
-      upsertGoal({
+      insertGoal({
         type: "goal",
         id: generateId(),
-        title: "New Goal",
+        title: t("frameworkBuilder.goal.defaultName"),
         childrenIds: [],
         indicatorIds: [],
       })

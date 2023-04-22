@@ -3,7 +3,7 @@ import { Activity } from "../../results";
 import FrameworkLevelCard from "../FrameworkLevelCard";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { green } from "@mui/material/colors";
-import { removeActivity, upsertActivity } from "./activitySlice";
+import { removeActivity, updateActivity } from "./activitySlice";
 import { useTranslation } from "react-i18next";
 
 export interface ActivityCardProps {
@@ -14,12 +14,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const handleSave = () =>
-    dispatch(upsertActivity({ ...activity, title: "Updated" }));
+    dispatch(updateActivity({ ...activity, title: "Updated" }));
   const handleDelete = () => dispatch(removeActivity(activity.id));
 
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(
-      upsertActivity({
+      updateActivity({
         ...activity,
         indicatorIds: [...activity.indicatorIds, indicatorId],
       })
@@ -27,13 +27,19 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
   };
   const handleIndicatorDelete = (indicatorId: string) => {
     dispatch(
-      upsertActivity({
+      updateActivity({
         ...activity,
         indicatorIds: activity.indicatorIds.filter(
           (iId) => iId !== indicatorId
         ),
       })
     );
+  };
+  const handleTitleChange = (title: string) => {
+    dispatch(updateActivity({ ...activity, title }));
+  };
+  const handleDescriptionChange = (description: string) => {
+    dispatch(updateActivity({ ...activity, description }));
   };
 
   return (
@@ -51,6 +57,8 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
         ]}
         onIndicatorCreate={handleIndicatorCreate}
         onIndicatorDelete={handleIndicatorDelete}
+        onTitleChange={handleTitleChange}
+        onDescriptionChange={handleDescriptionChange}
       />
     </>
   );

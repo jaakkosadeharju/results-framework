@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Output } from "../../../results";
-import store from "../../../app/store";
+import store, { RootState } from "../../../app/store";
 
 const outputsAdapter = createEntityAdapter<Output>({
   selectId: (output) => output.id,
@@ -11,14 +11,13 @@ export const outputSlice = createSlice({
   name: "outputs",
   initialState: outputsAdapter.getInitialState(),
   reducers: {
-    upsertOutput: outputsAdapter.upsertOne,
+    insertOutput: outputsAdapter.addOne,
+    updateOutput: outputsAdapter.upsertOne,
     removeOutput: outputsAdapter.removeOne,
   },
 });
 
-export const { upsertOutput, removeOutput } = outputSlice.actions;
-
-type RootState = ReturnType<typeof store.getState>;
+export const { insertOutput, updateOutput, removeOutput } = outputSlice.actions;
 const outputSelectors = outputsAdapter.getSelectors<RootState>(
   (state) => state.outputs
 );

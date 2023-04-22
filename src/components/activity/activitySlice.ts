@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Activity } from "../../results";
-import store from "../../app/store";
+import store, { RootState } from "../../app/store";
 
 const activitiesAdapter = createEntityAdapter<Activity>({
   selectId: (activity) => activity.id,
@@ -11,14 +11,15 @@ export const activitieSlice = createSlice({
   name: "activities",
   initialState: activitiesAdapter.getInitialState(),
   reducers: {
-    upsertActivity: activitiesAdapter.upsertOne,
+    insertActivity: activitiesAdapter.addOne,
+    updateActivity: activitiesAdapter.upsertOne,
     removeActivity: activitiesAdapter.removeOne,
   },
 });
 
-export const { upsertActivity, removeActivity } = activitieSlice.actions;
+export const { updateActivity, insertActivity, removeActivity } =
+  activitieSlice.actions;
 
-type RootState = ReturnType<typeof store.getState>;
 const activitieSelectors = activitiesAdapter.getSelectors<RootState>(
   (state) => state.activities
 );

@@ -16,16 +16,24 @@ import IndicatorRow from "./framework-builder/indicator/IndicatorRow";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAllIndicators,
-  upsertIndicator,
+  insertIndicator,
 } from "./framework-builder/indicator/indicatorSlice";
 import { useTranslation } from "react-i18next";
+import InPlaceEditor from "./InPlaceEditor";
 
 export interface FrameworkLevelCardProps {
   item: ResultLevel;
-  buttons?: { text: string; icon?: ReactNode; onClick: () => void }[];
+  buttons?: {
+    text: string;
+    icon?: ReactNode;
+    onClick: () => void;
+    testid?: string;
+  }[];
   avatar?: { text: string; color?: string };
   onIndicatorCreate: (indicatorId: string) => void;
   onIndicatorDelete: (indicatorId: string) => void;
+  onTitleChange: (title: string) => void;
+  onDescriptionChange: (description: string) => void;
 }
 
 const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
@@ -34,15 +42,17 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
   avatar,
   onIndicatorCreate,
   onIndicatorDelete,
+  onTitleChange,
+  onDescriptionChange,
 }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const handleAddIndicator = () => {
     const indicatorId = generateId();
     dispatch(
-      upsertIndicator({
+      insertIndicator({
         id: indicatorId,
-        title: "Indicator",
+        title: t("frameworkBuilder.newIndicator"),
         weight: 1,
       })
     );
@@ -71,7 +81,7 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
             )}
             <Box ml={2}>
               <Typography variant="h6" component="div">
-                {item.title}
+                <InPlaceEditor value={item.title} onChange={onTitleChange} />
               </Typography>
             </Box>
           </Box>
@@ -79,8 +89,11 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
           {/* Indicators */}
           <Box my={2}>
             <Typography variant="body2">
-              {item.description ??
-                "Cillum incididunt est fugiat elit fugiat quis aliquip commodo nostrud duis amet qui Lorem."}
+              <InPlaceEditor
+                multiline
+                value={item.description ?? ""}
+                onChange={onDescriptionChange}
+              />
             </Typography>
           </Box>
           <Box>
@@ -118,8 +131,8 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
           >
             <>
               {buttons &&
-                buttons.map(({ text, icon, onClick }, i) => (
-                  <Button key={i} onClick={onClick}>
+                buttons.map(({ text, icon, onClick, testid }, i) => (
+                  <Button key={i} onClick={onClick} data-testid={testid}>
                     {icon}
                     {text}
                   </Button>
