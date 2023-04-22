@@ -6,10 +6,11 @@ import {
   CardActions,
   CardContent,
   Chip,
+  Hidden,
   Typography,
 } from "@mui/material";
-import { ReactNode, useMemo } from "react";
-import { Indicator, ResultLevel } from "../results";
+import { ReactNode, useLayoutEffect, useMemo, useRef } from "react";
+import { Indicator, ResultLevel } from "../framework.types";
 import AddIcon from "@mui/icons-material/Add";
 import { generateId } from "../app/generateId";
 import IndicatorRow from "./framework-builder/indicator/IndicatorRow";
@@ -47,6 +48,7 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const cardRef = useRef<HTMLDivElement>(null);
   const handleAddIndicator = () => {
     const indicatorId = generateId();
     dispatch(
@@ -54,6 +56,9 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
         id: indicatorId,
         title: t("frameworkBuilder.newIndicator"),
         weight: 1,
+        baseline: 0,
+        target: 100,
+        unit: "%",
       })
     );
     onIndicatorCreate(indicatorId);
@@ -64,9 +69,14 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
     [allIndicators, item.indicatorIds]
   );
 
+  useLayoutEffect(() => {
+    // scroll to bottom
+    cardRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   return (
     <Box m={1}>
-      <Card sx={{ minWidth: 275 }}>
+      <Card sx={{ minWidth: 275 }} ref={cardRef}>
         <CardContent>
           <Box
             sx={{
@@ -81,7 +91,16 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
             )}
             <Box ml={2}>
               <Typography variant="h6" component="div">
-                <InPlaceEditor value={item.title} onChange={onTitleChange} />
+                <InPlaceEditor
+                  value={item.title}
+                  onChange={onTitleChange}
+                  validators={[
+                    {
+                      isValid: (value: string) => value !== "",
+                      message: t("validate.cannotBeEmpty"),
+                    },
+                  ]}
+                />
               </Typography>
             </Box>
           </Box>
@@ -106,9 +125,7 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
             {indicators.map((indicator) => (
               <IndicatorRow
                 key={indicator.id}
-                parent={item}
                 indicator={indicator}
-                weight={indicator.weight}
                 onIndicatorDelete={onIndicatorDelete}
               />
             ))}

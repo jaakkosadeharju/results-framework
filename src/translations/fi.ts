@@ -35,9 +35,28 @@ export default {
         abbr: "A",
         defaultName: "Uusi toiminto",
       },
+      indicator: {
+        title: "Nimi",
+        weight: "Painotus",
+        baseline: "Perustaso",
+        target: "Tavoite",
+        unit: "Yksikkö",
+        description: "Kuvaus",
+        actions: "",
+      },
     },
     inPlaceEditor: {
       placeholder: "[tyhjä]",
+    },
+    validate: {
+      required: "Pakollinen",
+      number: "Anna numero",
+      mustBeGreaterThan: "Pitää olla suurempi kuin {{min}}",
+      mustBeLessThan: "Pitää olla pienempi kuin {{max}}",
+      cannotBeNegative: "Ei voi olla negatiivinen",
+      cannotBeZero: "Ei voi olla nolla",
+      mustBePositive: "Pitää olla positiivinen",
+      cannotBeEmpty: "Ei voi olla tyhjä",
     },
   },
 };

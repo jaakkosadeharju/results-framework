@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Goal } from "../../../results";
+import { Goal } from "../../../framework.types";
 import FrameworkLevelCard from "../../FrameworkLevelCard";
 import OutcomeCard from "../outcome/OutcomeCard";
 import { generateId } from "../../../app/generateId";
@@ -86,7 +86,6 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
         onDescriptionChange={handleDescriptionChange}
       />
       <Box ml={2}>
-        blah
         {outcomes.map((o) => (
           <OutcomeCard
             key={o.id}

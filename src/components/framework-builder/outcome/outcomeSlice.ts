@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Outcome } from "../../../results";
+import { Outcome } from "../../../framework.types";
 import store, { RootState } from "../../../app/store";
 
 const outcomesAdapter = createEntityAdapter<Outcome>({

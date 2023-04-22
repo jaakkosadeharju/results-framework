@@ -1,5 +1,5 @@
 import generateId from "./app/generateId";
-import { Activity, Goal, Indicator, Outcome, Output } from "./results";
+import { Activity, Goal, Indicator, Outcome, Output } from "./framework.types";
 
 export const mockGoal = (options?: Partial<Goal>): Goal => ({
   type: "goal",
@@ -48,6 +48,6 @@ export const mockIndicator = (options?: Partial<Indicator>): Indicator => ({
   description: "Indicator 1 description",
   baseline: 0,
   target: 100,
-  currentValue: 50,
+  unit: "unit",
   ...options,
 });

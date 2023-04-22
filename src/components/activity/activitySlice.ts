@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Activity } from "../../results";
+import { Activity } from "../../framework.types";
 import store, { RootState } from "../../app/store";
 
 const activitiesAdapter = createEntityAdapter<Activity>({

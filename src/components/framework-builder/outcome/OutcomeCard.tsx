@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { Outcome } from "../../../results";
+import { Outcome } from "../../../framework.types";
 import FrameworkLevelCard from "../../FrameworkLevelCard";
 import OutputCard from "../output/OutputCard";
 import { generateId } from "../../../app/generateId";

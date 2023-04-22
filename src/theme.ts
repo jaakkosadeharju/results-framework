@@ -9,6 +9,15 @@ const defaultTheme = createTheme({
       main: colors.orange[500],
     },
   },
+  components: {
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: {
+          //   padding: "4px 4px",
+        },
+      },
+    },
+  },
 });
 
 export default defaultTheme;

@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Indicator } from "../../../results";
+import { Indicator } from "../../../framework.types";
 import store, { RootState } from "../../../app/store";
 
 const indicatorsAdapter = createEntityAdapter<Indicator>({

@@ -19,7 +19,15 @@ export interface Indicator {
   title: string;
   weight: number;
   description?: string;
-  baseline?: number;
-  target?: number;
-  currentValue?: number;
+  baseline: number;
+  target: number;
+  unit: string;
+}
+
+export interface Measurement {
+  id: string;
+  indicatorId: string;
+  value: number;
+  date: string;
+  note?: string;
 }

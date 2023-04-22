@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { Activity } from "../../results";
+import { Activity } from "../../framework.types";
 import FrameworkLevelCard from "../FrameworkLevelCard";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { green } from "@mui/material/colors";
