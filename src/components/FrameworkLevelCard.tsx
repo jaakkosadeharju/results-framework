@@ -48,7 +48,6 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const cardRef = useRef<HTMLDivElement>(null);
   const handleAddIndicator = () => {
     const indicatorId = generateId();
     dispatch(
@@ -69,14 +68,9 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
     [allIndicators, item.indicatorIds]
   );
 
-  useLayoutEffect(() => {
-    // scroll to bottom
-    cardRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
-
   return (
     <Box m={1}>
-      <Card sx={{ minWidth: 275 }} ref={cardRef}>
+      <Card sx={{ minWidth: 275 }}>
         <CardContent>
           <Box
             sx={{

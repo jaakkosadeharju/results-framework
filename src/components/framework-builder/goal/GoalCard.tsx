@@ -9,8 +9,9 @@ import { deepOrange } from "@mui/material/colors";
 import { removeGoal, updateGoal } from "./goalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { insertOutcome, selectAllOutcomes } from "../outcome/outcomeSlice";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { scrollToLastChild } from "../../../utils/scrollToChild";
 
 export interface GoalCardProps {
   goal: Goal;
@@ -19,6 +20,7 @@ export interface GoalCardProps {
 const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const cardRef = useRef<HTMLDivElement>(null);
   const allOutcomes = useSelector(selectAllOutcomes);
   const outcomes = useMemo(
     () => allOutcomes.filter((o) => goal.childrenIds.includes(o.id)),
@@ -38,8 +40,11 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
         title: t("frameworkBuilder.outcome.defaultName"),
         childrenIds: [],
         indicatorIds: [],
+        createdAt: new Date().toISOString(),
       })
     );
+
+    scrollToLastChild(cardRef.current, ".outcome-card", { offset: -50 });
   };
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(
@@ -61,7 +66,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
   };
 
   return (
-    <Box data-testid="GoalCard">
+    <Box data-testid="GoalCard" ref={cardRef}>
       <FrameworkLevelCard
         avatar={{ text: "G", color: deepOrange[500] }}
         item={goal}

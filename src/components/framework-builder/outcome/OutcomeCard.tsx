@@ -9,8 +9,9 @@ import { deepPurple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { removeOutcome, updateOutcome } from "./outcomeSlice";
 import { selectAllOutputs, insertOutput } from "../output/outputSlice";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { scrollToLastChild } from "../../../utils/scrollToChild";
 
 export interface OutcomeCardProps {
   goalId: string;
@@ -20,6 +21,7 @@ export interface OutcomeCardProps {
 const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const cardRef = useRef<HTMLDivElement>(null);
   const allOutputs = useSelector(selectAllOutputs);
   const outputs = useMemo(
     () => allOutputs.filter((o) => outcome.childrenIds.includes(o.id)),
@@ -43,8 +45,11 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
         title: t("frameworkBuilder.output.defaultName"),
         childrenIds: [],
         indicatorIds: [],
+        createdAt: new Date().toISOString(),
       })
     );
+
+    scrollToLastChild(cardRef.current, ".output-card", { offset: -50 });
   };
 
   const handleIndicatorCreate = (indicatorId: string) => {
@@ -71,7 +76,7 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
   };
 
   return (
-    <Box data-testid="OutcomeCard">
+    <Box className="outcome-card" data-testid="OutcomeCard" ref={cardRef}>
       <FrameworkLevelCard
         avatar={{ text: "OC", color: deepPurple[500] }}
         item={outcome}

@@ -20,6 +20,7 @@ const GoalList: React.FC<GoalListProps> = () => {
         title: t("frameworkBuilder.goal.defaultName"),
         childrenIds: [],
         indicatorIds: [],
+        createdAt: new Date().toISOString(),
       })
     );
   };

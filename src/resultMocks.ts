@@ -8,6 +8,7 @@ export const mockGoal = (options?: Partial<Goal>): Goal => ({
   description: "Goal 1 description",
   indicatorIds: [],
   childrenIds: [],
+  createdAt: new Date().toISOString(),
   ...options,
 });
 
@@ -18,6 +19,7 @@ export const mockOutcome = (options?: Partial<Outcome>): Outcome => ({
   description: "Outcome 1 description",
   indicatorIds: [],
   childrenIds: [],
+  createdAt: new Date().toISOString(),
   ...options,
 });
 
@@ -28,6 +30,7 @@ export const mockOutput = (options?: Partial<Output>): Output => ({
   description: "Output 1 description",
   indicatorIds: [],
   childrenIds: [],
+  createdAt: new Date().toISOString(),
   ...options,
 });
 
@@ -38,6 +41,7 @@ export const mockActivity = (options?: Partial<Activity>): Activity => ({
   description: "Activity 1 description",
   indicatorIds: [],
   childrenIds: [],
+  createdAt: new Date().toISOString(),
   ...options,
 });
 

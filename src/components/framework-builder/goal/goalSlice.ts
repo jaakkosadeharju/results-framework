@@ -1,10 +1,10 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Goal } from "../../../framework.types";
-import store, { RootState } from "../../../app/store";
+import { RootState } from "../../../app/store";
 
 const goalsAdapter = createEntityAdapter<Goal>({
   selectId: (goal) => goal.id,
-  sortComparer: (a, b) => a.title.localeCompare(b.title),
+  sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
 });
 
 export const goalSlice = createSlice({

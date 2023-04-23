@@ -4,7 +4,7 @@ import store, { RootState } from "../../../app/store";
 
 const outcomesAdapter = createEntityAdapter<Outcome>({
   selectId: (outcome) => outcome.id,
-  sortComparer: (a, b) => a.title.localeCompare(b.title),
+  sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
 });
 
 export const outcomeSlice = createSlice({

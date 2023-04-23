@@ -12,8 +12,9 @@ import {
   selectAllActivities,
   insertActivity,
 } from "../../activity/activitySlice";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { scrollToLastChild } from "../../../utils/scrollToChild";
 
 export interface OutputCardProps {
   output: Output;
@@ -22,6 +23,7 @@ export interface OutputCardProps {
 const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const cardRef = useRef<HTMLDivElement>(null);
   const allActivities = useSelector(selectAllActivities);
   const activities = useMemo(
     () => allActivities.filter((a) => output.childrenIds.includes(a.id)),
@@ -45,8 +47,10 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
         title: t("frameworkBuilder.activity.defaultName"),
         childrenIds: [],
         indicatorIds: [],
+        createdAt: new Date().toISOString(),
       })
     );
+    scrollToLastChild(cardRef.current, ".activity-card", { offset: 0 });
   };
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(
@@ -72,7 +76,7 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
   };
 
   return (
-    <>
+    <Box className="output-card" data-testid="OutputCard" ref={cardRef}>
       <FrameworkLevelCard
         avatar={{ text: "OP", color: pink[300] }}
         item={output}
@@ -99,7 +103,7 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
           <ActivityCard key={a.id} activity={a} />
         ))}
       </Box>
-    </>
+    </Box>
   );
 };
 

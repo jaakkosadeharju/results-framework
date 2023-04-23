@@ -7,6 +7,7 @@ export interface ResultLevel {
   description?: string;
   indicatorIds: string[];
   childrenIds: string[];
+  createdAt: string;
 }
 
 export type Goal = ResultLevel & { type: "goal" };

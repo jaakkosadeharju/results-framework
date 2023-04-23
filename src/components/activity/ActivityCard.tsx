@@ -5,6 +5,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { green } from "@mui/material/colors";
 import { removeActivity, updateActivity } from "./activitySlice";
 import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
 
 export interface ActivityCardProps {
   activity: Activity;
@@ -43,7 +44,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
   };
 
   return (
-    <>
+    <Box className="activity-card" data-testid="ActivityCard">
       <FrameworkLevelCard
         avatar={{ text: "A", color: green[500] }}
         item={activity}
@@ -60,7 +61,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
         onTitleChange={handleTitleChange}
         onDescriptionChange={handleDescriptionChange}
       />
-    </>
+    </Box>
   );
 };
 
