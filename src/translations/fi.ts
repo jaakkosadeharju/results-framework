@@ -3,9 +3,19 @@ export default {
     app: {
       title: "Results Framework",
       save: "Tallenna",
-      delete: "poista",
+      delete: "Poista",
+      cancel: "Peruuta",
+    },
+    evaluation: {
+      title: "Arviointi",
+      recordValue: "Kirjaa arvo",
+      value: "Arvo",
+      indicatorValue: {
+        value: "Arvo ({{unit}})",
+      },
     },
     frameworkBuilder: {
+      title: "Rakenne",
       indicators: "Indikaattorit",
       addIndicator: "Lisää indikaattori",
       newIndicator: "Uusi indikaattori",
@@ -43,6 +53,13 @@ export default {
         unit: "Yksikkö",
         description: "Kuvaus",
         actions: "",
+        dueDate: "Tavoitepäivä",
+        valueInterval: "Mittausväli",
+        valueIntervalTypeOptions: {
+          month: { plural: "kuukautta", singular: "kuukausi" },
+          week: { plural: "viikkoa", singular: "viikko" },
+          day: { plural: "päivää", singular: "päivä" },
+        },
       },
     },
     inPlaceEditor: {
@@ -57,6 +74,7 @@ export default {
       cannotBeZero: "Ei voi olla nolla",
       mustBePositive: "Pitää olla positiivinen",
       cannotBeEmpty: "Ei voi olla tyhjä",
+      cannotBeEqualTo: "Ei voi olla yhtä suuri kuin {{value}}",
     },
   },
 };

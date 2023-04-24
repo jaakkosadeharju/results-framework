@@ -1,13 +1,10 @@
-import {
-  PreloadedState,
-  combineReducers,
-  configureStore,
-} from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import goalReducer from "../components/framework-builder/goal/goalSlice";
 import outcomeSlice from "../components/framework-builder/outcome/outcomeSlice";
 import outputSlice from "../components/framework-builder/output/outputSlice";
 import activitySlice from "../components/activity/activitySlice";
 import indicatorSlice from "../components/framework-builder/indicator/indicatorSlice";
+import indicatorValueSlice from "../components/framework-builder/indicator/indicatorValueSlice";
 
 const persistedState: any = JSON.parse(
   localStorage.getItem("appState") ?? "{}"
@@ -19,6 +16,7 @@ const rootReducer = combineReducers({
   outputs: outputSlice,
   activities: activitySlice,
   indicators: indicatorSlice,
+  indicatorValues: indicatorValueSlice,
 });
 
 const setupStore = (preloadedState?: any) =>

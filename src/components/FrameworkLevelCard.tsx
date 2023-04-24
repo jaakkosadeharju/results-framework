@@ -58,6 +58,10 @@ const FrameworkLevelCard: React.FC<FrameworkLevelCardProps> = ({
         baseline: 0,
         target: 100,
         unit: "%",
+        description: "",
+        dueDate: new Date().toISOString(),
+        valueInterval: 1,
+        valueIntervalType: "month",
       })
     );
     onIndicatorCreate(indicatorId);

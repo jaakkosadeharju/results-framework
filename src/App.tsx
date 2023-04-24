@@ -1,31 +1,30 @@
-import {
-  Box,
-  Container,
-  ThemeProvider,
-  Typography,
-  createTheme,
-} from "@mui/material";
+import { Box, Container, ThemeProvider, Typography } from "@mui/material";
 import "./App.css";
-import GoalList from "./components/framework-builder/goal/GoalList";
+import FrameworkBuilder from "./components/framework-builder/goal/FrameworkBuilder";
 import { Provider } from "react-redux";
 import store from "./app/store";
-import { useTranslation } from "react-i18next";
 import defaultTheme from "./theme";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Evaluation from "./components/evaluation/Evaluation";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Evaluation />,
+  },
+  {
+    path: "/framework-builder",
+    element: <FrameworkBuilder />,
+  },
+]);
 
 function App() {
-  const { t } = useTranslation();
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Provider store={store}>
-        <Container className="App">
-          <Typography variant="h3" component="h1">
-            {t("app.title")}
-          </Typography>
-          <Box mt={2}>
-            <GoalList />
-          </Box>
-        </Container>
+        <Box mb={4}>
+          <RouterProvider router={router} />
+        </Box>
       </Provider>
     </ThemeProvider>
   );

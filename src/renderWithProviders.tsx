@@ -11,6 +11,7 @@ import outcomeSlice from "./components/framework-builder/outcome/outcomeSlice";
 import outputSlice from "./components/framework-builder/output/outputSlice";
 import activitySlice from "./components/activity/activitySlice";
 import indicatorSlice from "./components/framework-builder/indicator/indicatorSlice";
+import indicatorValueSlice from "./components/framework-builder/indicator/indicatorValueSlice";
 // As a basic setup, import your same slice reducers
 
 // This type interface extends the default options for render from RTL, as well
@@ -32,6 +33,7 @@ export function renderWithProviders(
         outputs: outputSlice,
         activities: activitySlice,
         indicators: indicatorSlice,
+        indicatorValues: indicatorValueSlice,
       },
       preloadedState,
     }),

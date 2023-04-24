@@ -1,22 +1,32 @@
 import { useDispatch } from "react-redux";
-import { Activity } from "../../framework.types";
+import { Activity, Output } from "../../framework.types";
 import FrameworkLevelCard from "../FrameworkLevelCard";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { green } from "@mui/material/colors";
 import { removeActivity, updateActivity } from "./activitySlice";
 import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
+import { updateOutput } from "../framework-builder/output/outputSlice";
 
 export interface ActivityCardProps {
   activity: Activity;
+  parent: Output;
 }
 
-const ActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
+const ActivityCard: React.FC<ActivityCardProps> = ({ activity, parent }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const handleSave = () =>
     dispatch(updateActivity({ ...activity, title: "Updated" }));
-  const handleDelete = () => dispatch(removeActivity(activity.id));
+  const handleDelete = () => {
+    dispatch(removeActivity(activity.id));
+    dispatch(
+      updateOutput({
+        ...parent,
+        childrenIds: parent.childrenIds.filter((id) => id !== activity.id),
+      })
+    );
+  };
 
   const handleIndicatorCreate = (indicatorId: string) => {
     dispatch(

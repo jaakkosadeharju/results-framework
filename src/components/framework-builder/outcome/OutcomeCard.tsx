@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { Outcome } from "../../../framework.types";
+import { Goal, Outcome } from "../../../framework.types";
 import FrameworkLevelCard from "../../FrameworkLevelCard";
 import OutputCard from "../output/OutputCard";
 import { generateId } from "../../../app/generateId";
@@ -12,13 +12,15 @@ import { selectAllOutputs, insertOutput } from "../output/outputSlice";
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToLastChild } from "../../../utils/scrollToChild";
+import { selectGoal, updateGoal } from "../goal/goalSlice";
+import { RootState } from "../../../app/store";
 
 export interface OutcomeCardProps {
-  goalId: string;
+  parent: Goal;
   outcome: Outcome;
 }
 
-const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
+const OutcomeCard: React.FC<OutcomeCardProps> = ({ parent, outcome }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -29,7 +31,15 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
   );
   const handleSave = () =>
     dispatch(updateOutcome({ ...outcome, title: "Updated" }));
-  const handleDelete = () => dispatch(removeOutcome(outcome.id));
+  const handleDelete = () => {
+    dispatch(removeOutcome(outcome.id));
+    dispatch(
+      updateGoal({
+        ...parent,
+        childrenIds: parent.childrenIds.filter((id) => id !== outcome.id),
+      })
+    );
+  };
   const handleNewOutput = () => {
     const outputId = generateId();
     dispatch(
@@ -100,7 +110,7 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ goalId, outcome }) => {
       />
       <Box ml={2}>
         {outputs.map((o) => (
-          <OutputCard key={o.id} output={o} />
+          <OutputCard key={o.id} output={o} parent={outcome} />
         ))}
       </Box>
     </Box>

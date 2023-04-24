@@ -24,7 +24,7 @@ export interface InplaceEditorProps {
 
 const TitleStyled = styled("div")<{ valueEmpty: boolean }>(
   ({ theme, valueEmpty }) => ({
-    color: valueEmpty ? colors.grey[600] : undefined,
+    color: valueEmpty ? colors.grey[400] : undefined,
     cursor: "pointer",
     minWidth: theme.spacing(4),
     borderRadius: theme.spacing(0.25),
@@ -68,8 +68,7 @@ const InPlaceEditor: React.FC<InplaceEditorProps> = ({
   const [errors, setErrors] = useState<Validator[]>(checkErrors(value));
   const inputRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
-  const firstErrorMessage = validators?.filter((v) => !v.isValid(value))[0]
-    ?.message;
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const save = () => {
     const newValue = inputRef.current?.value?.trim() ?? "";
@@ -82,13 +81,13 @@ const InPlaceEditor: React.FC<InplaceEditorProps> = ({
     onChange(newValue);
     setSavedValue(newValue);
     setIsEditing(false);
-    titleRef.current?.focus();
+    containerRef.current?.focus();
   };
 
   const discard = () => {
     onChange(savedValue);
     setIsEditing(false);
-    titleRef.current?.focus();
+    containerRef.current?.focus();
   };
 
   const openEditor = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -114,14 +113,22 @@ const InPlaceEditor: React.FC<InplaceEditorProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, [isEditing]);
+
   const valueEmpty = value === "";
 
   return (
     <Box
       data-testid="InPlaceEditor"
-      tabIndex={0}
       onKeyDown={handleKeyPress}
       onClick={openEditor}
+      tabIndex={0}
+      ref={containerRef}
     >
       {isEditing ? (
         <Tooltip arrow describeChild title={errors[0]?.message ?? ""}>
@@ -130,7 +137,6 @@ const InPlaceEditor: React.FC<InplaceEditorProps> = ({
             type={number ? "number" : "text"}
             defaultValue={value}
             inputRef={inputRef}
-            autoFocus
             error={errors.length > 0}
             onBlur={save}
             multiline={multiline}

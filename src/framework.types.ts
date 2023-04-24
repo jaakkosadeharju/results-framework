@@ -15,6 +15,7 @@ export type Outcome = ResultLevel & { type: "outcome" };
 export type Output = ResultLevel & { type: "output" };
 export type Activity = ResultLevel & { type: "activity" };
 
+export type ValueIntervalType = "month" | "week" | "day";
 export interface Indicator {
   id: string;
   title: string;
@@ -23,9 +24,12 @@ export interface Indicator {
   baseline: number;
   target: number;
   unit: string;
+  dueDate?: string;
+  valueInterval?: number;
+  valueIntervalType?: ValueIntervalType;
 }
 
-export interface Measurement {
+export interface IndicatorValue {
   id: string;
   indicatorId: string;
   value: number;

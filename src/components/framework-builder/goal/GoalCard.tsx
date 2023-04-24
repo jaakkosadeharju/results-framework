@@ -92,11 +92,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
       />
       <Box ml={2}>
         {outcomes.map((o) => (
-          <OutcomeCard
-            key={o.id}
-            goalId={goal.id ?? generateId()}
-            outcome={o}
-          />
+          <OutcomeCard key={o.id} parent={goal} outcome={o} />
         ))}
       </Box>
     </Box>

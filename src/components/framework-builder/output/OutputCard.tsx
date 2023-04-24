@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { Output } from "../../../framework.types";
+import { Outcome, Output } from "../../../framework.types";
 import ActivityCard from "../../activity/ActivityCard";
 import FrameworkLevelCard from "../../FrameworkLevelCard";
 import { generateId } from "../../../app/generateId";
@@ -15,12 +15,14 @@ import {
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToLastChild } from "../../../utils/scrollToChild";
+import { updateOutcome } from "../outcome/outcomeSlice";
 
 export interface OutputCardProps {
   output: Output;
+  parent: Outcome;
 }
 
-const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
+const OutputCard: React.FC<OutputCardProps> = ({ output, parent }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -29,7 +31,15 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
     () => allActivities.filter((a) => output.childrenIds.includes(a.id)),
     [allActivities, output.childrenIds]
   );
-  const handleDelete = () => dispatch(removeOutput(output.id));
+  const handleDelete = () => {
+    dispatch(removeOutput(output.id));
+    dispatch(
+      updateOutcome({
+        ...parent,
+        childrenIds: parent.childrenIds.filter((id) => id !== output.id),
+      })
+    );
+  };
   const handleSave = () =>
     dispatch(updateOutput({ ...output, title: "Updated" }));
   const handleAddActivity = () => {
@@ -100,7 +110,7 @@ const OutputCard: React.FC<OutputCardProps> = ({ output }) => {
       />
       <Box ml={2}>
         {activities.map((a) => (
-          <ActivityCard key={a.id} activity={a} />
+          <ActivityCard key={a.id} activity={a} parent={output} />
         ))}
       </Box>
     </Box>

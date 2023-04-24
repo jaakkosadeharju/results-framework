@@ -1,13 +1,13 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Indicator } from "../../../framework.types";
-import store, { RootState } from "../../../app/store";
+import { RootState } from "../../../app/store";
 
 const indicatorsAdapter = createEntityAdapter<Indicator>({
   selectId: (indicator) => indicator.id,
   sortComparer: (a, b) => a.title.localeCompare(b.title),
 });
 
-export const indicatorslice = createSlice({
+export const indicatorSlice = createSlice({
   name: "indicators",
   initialState: indicatorsAdapter.getInitialState(),
   reducers: {
@@ -18,7 +18,7 @@ export const indicatorslice = createSlice({
 });
 
 export const { insertIndicator, updateIndicator, removeIndicator } =
-  indicatorslice.actions;
+  indicatorSlice.actions;
 
 const indicatorselectors = indicatorsAdapter.getSelectors<RootState>(
   (state) => state.indicators
@@ -28,4 +28,4 @@ const indicatorselectors = indicatorsAdapter.getSelectors<RootState>(
 export const selectAllIndicators = indicatorselectors.selectAll;
 export const selectIndicator = indicatorselectors.selectById;
 
-export default indicatorslice.reducer;
+export default indicatorSlice.reducer;

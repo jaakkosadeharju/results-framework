@@ -1,5 +1,16 @@
-import { Box, Button, Grid, Typography, colors, styled } from "@mui/material";
-import { Indicator } from "../../../framework.types";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  Stack,
+  colors,
+  styled,
+  useTheme,
+} from "@mui/material";
+import { Indicator, ValueIntervalType } from "../../../framework.types";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useDispatch } from "react-redux";
 import { removeIndicator, updateIndicator } from "./indicatorSlice";
@@ -15,13 +26,14 @@ export interface IndicatorRowProps {
 const IndicatorRowStyled = styled(Box)(({ theme }) => ({
   margin: theme.spacing(1),
   padding: theme.spacing(1),
-  backgroundColor: colors.blueGrey[50],
+  backgroundColor: colors.blueGrey[700],
 }));
 
 const IndicatorRow: React.FC<IndicatorRowProps> = ({
   indicator,
   onIndicatorDelete,
 }) => {
+  const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const handleDelete = () => {
@@ -46,6 +58,19 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
   };
   const handleDescriptionChange = (description: string) => {
     dispatch(updateIndicator({ ...indicator, description }));
+  };
+  const handleDueDateChange = (dueDate: string) => {
+    dispatch(updateIndicator({ ...indicator, dueDate }));
+  };
+  const handleValueIntervalChange = (valueInterval: string) => {
+    dispatch(
+      updateIndicator({ ...indicator, valueInterval: Number(valueInterval) })
+    );
+  };
+  const handleValueIntervalTypeChange = (
+    valueIntervalType: ValueIntervalType
+  ) => {
+    dispatch(updateIndicator({ ...indicator, valueIntervalType }));
   };
 
   return (
@@ -94,16 +119,6 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
             value={indicator.baseline?.toFixed() || ""}
             number
             onChange={handleBaselineChange}
-            validators={[
-              {
-                isValid: (value) => Number(value) < Number(indicator.target),
-                message: t("validate.mustBeLessThan", {
-                  max: t(
-                    "frameworkBuilder.indicator.target"
-                  ).toLocaleLowerCase(),
-                }),
-              },
-            ]}
           />
         </Grid>
         <Grid item xs={3} md={2} lg={1}>
@@ -114,16 +129,6 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
             value={indicator.target?.toFixed() || ""}
             number
             onChange={handleTargetChange}
-            validators={[
-              {
-                isValid: (value) => Number(value) > Number(indicator.baseline),
-                message: t("validate.mustBeGreaterThan", {
-                  min: t(
-                    "frameworkBuilder.indicator.baseline"
-                  ).toLocaleLowerCase(),
-                }),
-              },
-            ]}
           />
         </Grid>
         <Grid item xs={3} md={2} lg={1}>
@@ -141,6 +146,65 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
             ]}
           />
         </Grid>
+        <Grid item xs={3} md={2} lg={1}>
+          <IndicatorCellTitle>
+            {t("frameworkBuilder.indicator.valueInterval")}
+          </IndicatorCellTitle>
+
+          <Stack direction={"row"} alignItems={"center"}>
+            <Box>
+              <InPlaceEditor
+                value={indicator.valueInterval?.toFixed() || ""}
+                onChange={handleValueIntervalChange}
+                number
+                validators={[
+                  {
+                    isValid: (value) => Number(value) >= 1,
+                    message: t("validate.cannotBeEmpty"),
+                  },
+                ]}
+              />
+            </Box>
+            <Box>
+              <FormControl fullWidth>
+                <Select
+                  id="value-interval-type-select"
+                  value={indicator.valueIntervalType || "day"}
+                  size="small"
+                  displayEmpty
+                  variant="standard"
+                  onChange={(e) =>
+                    handleValueIntervalTypeChange(
+                      e.target.value as ValueIntervalType
+                    )
+                  }
+                >
+                  <MenuItem value={"day"}>
+                    {t(
+                      `frameworkBuilder.indicator.valueIntervalTypeOptions.day.${
+                        indicator.valueInterval === 1 ? "singular" : "plural"
+                      }`
+                    )}
+                  </MenuItem>
+                  <MenuItem value={"week"}>
+                    {t(
+                      `frameworkBuilder.indicator.valueIntervalTypeOptions.week.${
+                        indicator.valueInterval === 1 ? "singular" : "plural"
+                      }`
+                    )}
+                  </MenuItem>
+                  <MenuItem value={"month"}>
+                    {t(
+                      `frameworkBuilder.indicator.valueIntervalTypeOptions.month.${
+                        indicator.valueInterval === 1 ? "singular" : "plural"
+                      }`
+                    )}
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Stack>
+        </Grid>
         <Grid item xs={10} md={10} lg={3}>
           <IndicatorCellTitle>
             {t("frameworkBuilder.indicator.description")}
@@ -152,7 +216,7 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
           />
         </Grid>
         <Grid item xs={2} md={2} lg={1}>
-          <Button size="small" color="error" onClick={handleDelete}>
+          <Button size="small" color={"error"} onClick={handleDelete}>
             <DeleteForeverIcon />
           </Button>
         </Grid>
