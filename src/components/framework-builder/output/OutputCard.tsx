@@ -16,6 +16,7 @@ import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToLastChild } from "../../../utils/scrollToChild";
 import { updateOutcome } from "../outcome/outcomeSlice";
+import { cleanUpOrphans } from "../../../app/store";
 
 export interface OutputCardProps {
   output: Output;
@@ -32,13 +33,13 @@ const OutputCard: React.FC<OutputCardProps> = ({ output, parent }) => {
     [allActivities, output.childrenIds]
   );
   const handleDelete = () => {
-    dispatch(removeOutput(output.id));
     dispatch(
       updateOutcome({
         ...parent,
         childrenIds: parent.childrenIds.filter((id) => id !== output.id),
       })
     );
+    cleanUpOrphans();
   };
   const handleSave = () =>
     dispatch(updateOutput({ ...output, title: "Updated" }));

@@ -83,6 +83,7 @@ const IndicatorValue: React.FC<IndicatorValueProps> = ({ indicator }) => {
                   type="number"
                   size="small"
                   autoFocus
+                  defaultValue={indicatorValue?.value ?? indicator.baseline}
                   label={t("evaluation.indicatorValue.value", {
                     unit: indicator.unit,
                   })}

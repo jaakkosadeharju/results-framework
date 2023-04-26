@@ -6,6 +6,11 @@ import store from "./app/store";
 import defaultTheme from "./theme";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Evaluation from "./components/evaluation/Evaluation";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/fi";
 
 const router = createBrowserRouter([
   {
@@ -18,14 +23,18 @@ const router = createBrowserRouter([
   },
 ]);
 
+dayjs.extend(localizedFormat).locale("fi");
+
 function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Provider store={store}>
-        <Box mb={4}>
-          <RouterProvider router={router} />
-        </Box>
-      </Provider>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
+        <Provider store={store}>
+          <Box mb={4}>
+            <RouterProvider router={router} />
+          </Box>
+        </Provider>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }

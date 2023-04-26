@@ -53,7 +53,7 @@ export default {
         unit: "Yksikkö",
         description: "Kuvaus",
         actions: "",
-        dueDate: "Tavoitepäivä",
+        dueDate: "Eräpäivä",
         valueInterval: "Mittausväli",
         valueIntervalTypeOptions: {
           month: { plural: "kuukautta", singular: "kuukausi" },

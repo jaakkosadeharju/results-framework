@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { IndicatorValue } from "../../../framework.types";
 import { RootState } from "../../../app/store";
+import { selectIndicator } from "./indicatorSlice";
 
 const indicatorValuesAdapter = createEntityAdapter<IndicatorValue>({
   selectId: (indicator) => indicator.id,

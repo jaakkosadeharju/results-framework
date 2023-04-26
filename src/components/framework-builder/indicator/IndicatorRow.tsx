@@ -17,6 +17,8 @@ import { removeIndicator, updateIndicator } from "./indicatorSlice";
 import InPlaceEditor from "../../InPlaceEditor";
 import { useTranslation } from "react-i18next";
 import IndicatorCellTitle from "./IndicatorCellTitle";
+import { DateField } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 export interface IndicatorRowProps {
   indicator: Indicator;
@@ -145,6 +147,16 @@ const IndicatorRow: React.FC<IndicatorRowProps> = ({
               },
             ]}
           />
+        </Grid>
+
+        <Grid item>
+          <Box>
+            <DateField
+              label={t("frameworkBuilder.indicator.dueDate")}
+              defaultValue={dayjs(indicator.dueDate)}
+              onChange={(date) => handleDueDateChange(date?.format() ?? "")}
+            />
+          </Box>
         </Grid>
         <Grid item xs={3} md={2} lg={1}>
           <IndicatorCellTitle>

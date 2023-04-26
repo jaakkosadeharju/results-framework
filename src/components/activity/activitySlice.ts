@@ -14,11 +14,16 @@ export const activitieSlice = createSlice({
     insertActivity: activitiesAdapter.addOne,
     updateActivity: activitiesAdapter.upsertOne,
     removeActivity: activitiesAdapter.removeOne,
+    removeMultipleActivities: activitiesAdapter.removeMany,
   },
 });
 
-export const { updateActivity, insertActivity, removeActivity } =
-  activitieSlice.actions;
+export const {
+  updateActivity,
+  insertActivity,
+  removeActivity,
+  removeMultipleActivities,
+} = activitieSlice.actions;
 
 const activitieSelectors = activitiesAdapter.getSelectors<RootState>(
   (state) => state.activities

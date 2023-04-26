@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Outcome } from "../../../framework.types";
-import store, { RootState } from "../../../app/store";
+import { RootState } from "../../../app/store";
 
 const outcomesAdapter = createEntityAdapter<Outcome>({
   selectId: (outcome) => outcome.id,
@@ -14,11 +14,16 @@ export const outcomeSlice = createSlice({
     insertOutcome: outcomesAdapter.addOne,
     updateOutcome: outcomesAdapter.upsertOne,
     removeOutcome: outcomesAdapter.removeOne,
+    removeMultipleOutcomes: outcomesAdapter.removeMany,
   },
 });
 
-export const { updateOutcome, insertOutcome, removeOutcome } =
-  outcomeSlice.actions;
+export const {
+  updateOutcome,
+  insertOutcome,
+  removeOutcome,
+  removeMultipleOutcomes,
+} = outcomeSlice.actions;
 
 const outcomeSelectors = outcomesAdapter.getSelectors<RootState>(
   (state) => state.outcomes

@@ -40,7 +40,7 @@ export function calculateProgress(level: ResultLevel): number {
   const weightedValues = indicators.map((i) => {
     const { baseline, target, weight } = i.indicator;
     const latestValue =
-      i.values.sort((a, b) => (a.date < b.date ? -1 : 1))[0]?.value ??
+      i.values.sort((a, b) => (a.date < b.date ? 1 : -1))[0]?.value ??
       i.indicator.baseline;
 
     return (weight * (latestValue - baseline)) / (target - baseline);

@@ -14,10 +14,16 @@ export const outputSlice = createSlice({
     insertOutput: outputsAdapter.addOne,
     updateOutput: outputsAdapter.upsertOne,
     removeOutput: outputsAdapter.removeOne,
+    removeMultipleOutputs: outputsAdapter.removeMany,
   },
 });
 
-export const { insertOutput, updateOutput, removeOutput } = outputSlice.actions;
+export const {
+  insertOutput,
+  updateOutput,
+  removeOutput,
+  removeMultipleOutputs,
+} = outputSlice.actions;
 const outputSelectors = outputsAdapter.getSelectors<RootState>(
   (state) => state.outputs
 );

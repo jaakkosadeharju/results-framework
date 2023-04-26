@@ -12,6 +12,8 @@ import { insertOutcome, selectAllOutcomes } from "../outcome/outcomeSlice";
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToLastChild } from "../../../utils/scrollToChild";
+import { removeMultipleIndicators } from "../indicator/indicatorSlice";
+import { cleanUpOrphans } from "../../../app/store";
 
 export interface GoalCardProps {
   goal: Goal;
@@ -27,7 +29,10 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal }) => {
     [allOutcomes, goal.childrenIds]
   );
   const handleSave = () => dispatch(updateGoal({ ...goal, title: "Updated" }));
-  const handleDelete = () => dispatch(removeGoal(goal.id));
+  const handleDelete = () => {
+    dispatch(removeGoal(goal.id));
+    cleanUpOrphans();
+  };
   const handleNewOutcome = () => {
     const outcomeId = generateId();
     dispatch(

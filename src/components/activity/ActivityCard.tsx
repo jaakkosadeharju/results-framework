@@ -7,6 +7,8 @@ import { removeActivity, updateActivity } from "./activitySlice";
 import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
 import { updateOutput } from "../framework-builder/output/outputSlice";
+import { removeMultipleIndicators } from "../framework-builder/indicator/indicatorSlice";
+import { cleanUpOrphans } from "../../app/store";
 
 export interface ActivityCardProps {
   activity: Activity;
@@ -19,13 +21,13 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, parent }) => {
   const handleSave = () =>
     dispatch(updateActivity({ ...activity, title: "Updated" }));
   const handleDelete = () => {
-    dispatch(removeActivity(activity.id));
     dispatch(
       updateOutput({
         ...parent,
         childrenIds: parent.childrenIds.filter((id) => id !== activity.id),
       })
     );
+    cleanUpOrphans();
   };
 
   const handleIndicatorCreate = (indicatorId: string) => {

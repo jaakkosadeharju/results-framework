@@ -13,7 +13,8 @@ import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToLastChild } from "../../../utils/scrollToChild";
 import { selectGoal, updateGoal } from "../goal/goalSlice";
-import { RootState } from "../../../app/store";
+import { RootState, cleanUpOrphans } from "../../../app/store";
+import { removeMultipleIndicators } from "../indicator/indicatorSlice";
 
 export interface OutcomeCardProps {
   parent: Goal;
@@ -32,13 +33,13 @@ const OutcomeCard: React.FC<OutcomeCardProps> = ({ parent, outcome }) => {
   const handleSave = () =>
     dispatch(updateOutcome({ ...outcome, title: "Updated" }));
   const handleDelete = () => {
-    dispatch(removeOutcome(outcome.id));
     dispatch(
       updateGoal({
         ...parent,
         childrenIds: parent.childrenIds.filter((id) => id !== outcome.id),
       })
     );
+    cleanUpOrphans();
   };
   const handleNewOutput = () => {
     const outputId = generateId();
