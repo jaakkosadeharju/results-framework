@@ -7,9 +7,9 @@ export function resolveNextRecodingDateFromDueDate(
   interval: number,
   intervalType: ValueIntervalType
 ): dayjs.Dayjs | null {
-  let nextRecordingDate: dayjs.Dayjs | null = null;
-  let dateCursor = dueDate.clone();
   let now = dayjs();
+  let dateCursor = dayjs(dueDate);
+  let nextRecordingDate: dayjs.Dayjs | null = dayjs(dateCursor);
 
   while (true) {
     dateCursor = dateCursor.add(-interval, intervalType);

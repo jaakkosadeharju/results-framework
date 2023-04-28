@@ -4,7 +4,6 @@ import {
   Container,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -18,9 +17,10 @@ import {
   selectIndicatorRecordingDates,
 } from "../framework-builder/indicator/indicatorSlice";
 import IndicatorValue from "./IndicatorValue";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { selectAllIndicatorValues } from "../framework-builder/indicator/indicatorValueSlice";
 import { Goal } from "../../framework.types";
+import dayjs from "dayjs";
 
 export interface DashboardProps {}
 
@@ -35,6 +35,22 @@ const Evaluation: React.FC<DashboardProps> = ({}) => {
     [allIndicatorValues]
   );
 
+  const overdueIndicators = recordingDateDetails.filter(
+    (d) => d.nextRecordingDate && d.nextRecordingDate <= dayjs()
+  );
+  const dueDateInOneWeek = recordingDateDetails.filter(
+    (d) =>
+      d.nextRecordingDate &&
+      d.nextRecordingDate >= dayjs() &&
+      d.nextRecordingDate < dayjs().add(1, "week")
+  );
+  const dueDateInOneMonth = recordingDateDetails.filter(
+    (d) =>
+      d.nextRecordingDate &&
+      d.nextRecordingDate >= dayjs().add(1, "week") &&
+      d.nextRecordingDate < dayjs().add(1, "month")
+  );
+
   return (
     <div data-testid="Evaluation">
       <ButtonAppBar />
@@ -43,9 +59,28 @@ const Evaluation: React.FC<DashboardProps> = ({}) => {
         <Stack spacing={2}>
           <Paper>
             <Box padding={2}>
-              {recordingDateDetails.map(({ indicator, nextRecordingDate }) => (
+              {overdueIndicators.length > 0 && (
+                <Typography variant="h6">Overdue</Typography>
+              )}
+              {overdueIndicators.map(({ indicator, nextRecordingDate }) => (
                 <Box key={indicator.id}>
-                  {indicator.title} ({nextRecordingDate})
+                  {indicator.title} ({nextRecordingDate?.format("L")})
+                </Box>
+              ))}
+              {dueDateInOneWeek.length > 0 && (
+                <Typography variant="h6">Upcoming in a week</Typography>
+              )}
+              {dueDateInOneWeek.map(({ indicator, nextRecordingDate }) => (
+                <Box key={indicator.id}>
+                  {indicator.title} ({nextRecordingDate?.format("L")})
+                </Box>
+              ))}
+              {dueDateInOneMonth.length > 0 && (
+                <Typography variant="h6">Upcoming in a month</Typography>
+              )}
+              {dueDateInOneMonth.map(({ indicator, nextRecordingDate }) => (
+                <Box key={indicator.id}>
+                  {indicator.title} ({nextRecordingDate?.format("L")})
                 </Box>
               ))}
             </Box>

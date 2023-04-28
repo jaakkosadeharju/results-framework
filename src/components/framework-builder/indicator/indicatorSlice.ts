@@ -53,7 +53,7 @@ export const selectIndicatorRecordingDates = createSelector(
     }));
 
     return lastDates.map(({ indicator, latestValue }) => {
-      const latestRecordingDate = dayjs(latestValue);
+      const latestRecordingDate = latestValue ? dayjs(latestValue) : undefined;
       let nextRecordingDate: dayjs.Dayjs | null = null;
 
       // Calculate from previous recording date unless dueDate is set
@@ -62,7 +62,7 @@ export const selectIndicatorRecordingDates = createSelector(
         indicator.valueInterval &&
         indicator.valueIntervalType
       ) {
-        nextRecordingDate = latestRecordingDate.add(
+        nextRecordingDate = dayjs(latestRecordingDate).add(
           indicator.valueInterval,
           indicator.valueIntervalType
         );
@@ -84,10 +84,18 @@ export const selectIndicatorRecordingDates = createSelector(
         );
       }
 
+      // set date as null if value recorded after due date
+      if (
+        latestRecordingDate &&
+        latestRecordingDate >= dayjs(indicator.dueDate)
+      ) {
+        nextRecordingDate = null;
+      }
+
       return {
         indicator,
         latestValue,
-        nextRecordingDate: nextRecordingDate?.format("L"),
+        nextRecordingDate,
       };
     });
   }
